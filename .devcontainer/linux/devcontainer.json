@@ -2,7 +2,7 @@
     "name": "Linux | Waypoint Navigation",
     "privileged": true,
     "remoteUser": "rosusr",
-    "image":"ghcr.io/srindot/waypointnavigation:latest",
+    "image":"ghcr.io/soham2560/gz-ros-px4-tutorials:v1",
     "workspaceFolder": "/home/rosusr/workspace",
     "workspaceMount": "type=bind,source=${localWorkspaceFolder},target=/home/rosusr/workspace",
     "customizations": {
