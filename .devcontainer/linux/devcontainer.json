@@ -3,8 +3,8 @@
     "privileged": true,
     "remoteUser": "rosusr",
     "image":"ghcr.io/soham2560/gz-ros-px4-tutorials:v1",
-    "workspaceFolder": "/home/rosusr/workspace",
-    "workspaceMount": "type=bind,source=${localWorkspaceFolder},target=/home/rosusr/workspace",
+    "workspaceFolder": "/home/rosusr/workspace/src",
+    "workspaceMount": "type=bind,source=${localWorkspaceFolder},target=/home/rosusr/workspace/src",
     "customizations": {
         "vscode": {
             "extensions": [
@@ -46,5 +46,6 @@
             "source": "${localWorkspaceFolder}/.vscode",
             "target": "${containerWorkspaceFolder}/.vscode"
         }
-    ]
+    ],
+    "postStartCommand": "sudo chown -R rosusr /home/rosusr/workspace"
 }

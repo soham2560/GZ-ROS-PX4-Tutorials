@@ -44,5 +44,6 @@
             "source": "${localWorkspaceFolder}/.vscode",
             "target": "${containerWorkspaceFolder}/.vscode"
         }
-    ]
+    ],
+    "postStartCommand": "sudo chown -R rosusr /home/rosusr/workspace"
 }
