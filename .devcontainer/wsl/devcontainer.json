@@ -1,0 +1,60 @@
+{
+    "name": "WSL | Waypoint Navigation",
+    "privileged": true,
+    "remoteUser": "rosusr",
+    "image": "ghcr.io/srindot/waypointnavigation:latest",
+    "workspaceFolder": "/home/rosusr/workspace",
+    "workspaceMount": "type=bind,source=${localWorkspaceFolder},target=/home/rosusr/workspace",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-vscode.cpptools",
+                "ms-python.python",
+                "esbenp.prettier-vscode",
+                "eamodio.gitlens",
+                "ms-iot.vscode-ros",
+                "ms-toolsai.jupyter",
+                "mechatroner.rainbow-csv",
+                "ms-azuretools.vscode-docker",
+                "twxs.cmake",
+                "ms-vscode.cmake-tools",
+                "redhat.vscode-yaml",
+                "smilerobotics.urdf",
+                "betwo.b2-catkin-tools",
+                "zachflower.uncrustify",
+                "ms-python.vscode-pylance"
+            ]
+        }
+    },
+    "containerEnv": {
+        "DISPLAY": ":0",
+        "QT_QPA_PLATFORM": "xcb",
+        "NVIDIA_DRIVER_CAPABILITIES": "all",
+        "NVIDIA_VISIBLE_DEVICES": "all",
+        "LD_LIBRARY_PATH": "/usr/lib/wsl/lib",
+        "MESA_D3D12_DEFAULT_ADAPTER_NAME": "NVIDIA"
+    },
+    "runArgs": [
+        "--gpus=all",
+        "--privileged",
+        "--net=host",
+        "--device=/dev/dxg",
+        "-v", "/usr/lib/wsl:/usr/lib/wsl",
+        "-v", "/mnt/wslg:/mnt/wslg",
+        "-e", "WAYLAND_DISPLAY=$WAYLAND_DISPLAY",
+        "-e", "XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR",
+        "-e", "DISPLAY=${localEnv:DISPLAY}",
+        "-e", "QT_QPA_PLATFORM=xcb",
+        "--volume=/tmp/.X11-unix:/tmp/.X11-unix"
+    ],
+    "initializeCommand": "xhost +local:docker",
+    "postCreateCommand": "",
+    "features": {},
+    "mounts": [
+        {
+            "type": "bind",
+            "source": "${localWorkspaceFolder}/.vscode",
+            "target": "${containerWorkspaceFolder}/.vscode"
+        }
+    ]
+}
