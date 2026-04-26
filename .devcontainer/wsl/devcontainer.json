@@ -29,16 +29,12 @@
     "containerEnv": {
         "DISPLAY": ":0",
         "QT_QPA_PLATFORM": "xcb",
-        "NVIDIA_DRIVER_CAPABILITIES": "all",
-        "NVIDIA_VISIBLE_DEVICES": "all",
         "LD_LIBRARY_PATH": "/usr/lib/wsl/lib",
-        "MESA_D3D12_DEFAULT_ADAPTER_NAME": "NVIDIA"
+        "LIBGL_ALWAYS_SOFTWARE": "1"
     },
     "runArgs": [
-        "--gpus=all",
         "--privileged",
         "--net=host",
-        "--device=/dev/dxg",
         "-v", "/usr/lib/wsl:/usr/lib/wsl",
         "-v", "/mnt/wslg:/mnt/wslg",
         "-e", "WAYLAND_DISPLAY=$WAYLAND_DISPLAY",
