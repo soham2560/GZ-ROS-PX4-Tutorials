@@ -36,7 +36,7 @@ RUN mkdir -p /home/rosusr/ws_sensor_combined/src && \
     colcon build && \
     . install/local_setup.bash
 
-RUN pip install "numpy<2" git+https://github.com/fishros/ros2bag_convert.git
+RUN pip install git+https://github.com/fishros/ros2bag_convert.git
 
 RUN rm -rf /home/rosusr/PX4-Autopilot && \
     git clone https://github.com/pyromania99/PX4-Autopilot.git /home/rosusr/PX4-Autopilot && \
@@ -48,6 +48,8 @@ RUN chown -R rosusr:rosusr /home/rosusr/PX4-Autopilot
 USER rosusr
 
 RUN cd /home/rosusr/PX4-Autopilot && make px4_sitl
+
+RUN pip install "numpy<2" 
 
 RUN echo "source /opt/ros/humble/setup.bash" >> /home/rosusr/.bashrc && \
     echo "source /home/rosusr/ws_sensor_combined/install/local_setup.bash" >> /home/rosusr/.bashrc
