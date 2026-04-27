@@ -46,6 +46,7 @@ class OffboardControl(Node):
         self.path_active = False
         self.current_yaw = 0.0
         
+        self.altitude = -0.5
         self.lookahead_distance = 1.0  
         self.max_speed = 0.5           
         self.dt = 0.1                  

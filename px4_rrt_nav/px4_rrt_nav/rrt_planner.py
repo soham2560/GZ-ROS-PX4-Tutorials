@@ -35,11 +35,11 @@ class RRTPlanner(Node):
     def __init__(self):
         super().__init__('rrt_planner')
         
-        self.declare_parameter('inflation_radius', 0.25) 
-        self.declare_parameter('max_iter', 10000)      
-        self.declare_parameter('step_size', 0.01)      # Interpret explicitly as meters
-        self.declare_parameter('search_radius', 2.0)  # Interpret explicitly as meters
-        self.declare_parameter('goal_bias', 0.001)      
+        self.declare_parameter('inflation_radius', 0.1) 
+        self.declare_parameter('max_iter', 20000)      
+        self.declare_parameter('step_size', 0.02)      # Interpret explicitly as meters
+        self.declare_parameter('search_radius', 3.0)  # Interpret explicitly as meters
+        self.declare_parameter('goal_bias', 0.01)      
         
         self.inflation_radius = self.get_parameter('inflation_radius').value
         self.max_iter = self.get_parameter('max_iter').value
@@ -167,7 +167,7 @@ class RRTPlanner(Node):
         marker.action = Marker.ADD
         marker.pose.orientation.w = 1.0
         
-        marker.scale.x = 0.05 
+        marker.scale.x = 0.02 
         marker.color.a = 0.5  
         marker.color.r = 0.0
         marker.color.g = 1.0

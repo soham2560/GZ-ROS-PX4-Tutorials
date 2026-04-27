@@ -37,7 +37,7 @@ def generate_launch_description():
             executable='rrt_planner',
             name='rrt_planner',
             output='screen',
-            parameters=[{'inflation_radius': 0.8}, {'step_size': 0.5}]
+            parameters=[{'inflation_radius': 0.40}, {'step_size': 0.02}]
         ),
 
         # 4. Offboard Control Node
