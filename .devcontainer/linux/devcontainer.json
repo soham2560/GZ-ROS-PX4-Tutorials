@@ -2,9 +2,9 @@
     "name": "Linux | Waypoint Navigation",
     "privileged": true,
     "remoteUser": "rosusr",
-    "image":"ghcr.io/srindot/waypointnavigation:latest",
-    "workspaceFolder": "/home/rosusr/workspace",
-    "workspaceMount": "type=bind,source=${localWorkspaceFolder},target=/home/rosusr/workspace",
+    "image":"ghcr.io/soham2560/gz-ros-px4-tutorials:v1",
+    "workspaceFolder": "/home/rosusr/workspace/src",
+    "workspaceMount": "type=bind,source=${localWorkspaceFolder},target=/home/rosusr/workspace/src",
     "customizations": {
         "vscode": {
             "extensions": [
@@ -29,11 +29,8 @@
     "containerEnv": {
         "DISPLAY": ":0",
         "QT_QPA_PLATFORM": "xcb",
-        "NVIDIA_DRIVER_CAPABILITIES": "all", // Remove this Lines If you don't have a Nvida Card
-        "NVIDIA_VISIBLE_DEVICES": "all"      // Remove this Lines If you don't have a Nvida Card
     },
     "runArgs": [
-        "--gpus=all", // Remove this Lines If you don't have a Nvida Card
         "--privileged",
         "-e", "DISPLAY=${localEnv:DISPLAY}",
         "-e", "QT_QPA_PLATFORM=xcb",
@@ -48,5 +45,6 @@
             "source": "${localWorkspaceFolder}/.vscode",
             "target": "${containerWorkspaceFolder}/.vscode"
         }
-    ]
+    ],
+    "postStartCommand": "sudo chown -R rosusr /home/rosusr/workspace"
 }

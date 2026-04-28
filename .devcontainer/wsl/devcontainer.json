@@ -2,7 +2,7 @@
     "name": "WSL | Waypoint Navigation",
     "privileged": true,
     "remoteUser": "rosusr",
-    "image": "ghcr.io/srindot/waypointnavigation:latest",
+    "image":"ghcr.io/soham2560/gz-ros-px4-tutorials:v1",
     "workspaceFolder": "/home/rosusr/workspace",
     "workspaceMount": "type=bind,source=${localWorkspaceFolder},target=/home/rosusr/workspace",
     "customizations": {
@@ -29,16 +29,12 @@
     "containerEnv": {
         "DISPLAY": ":0",
         "QT_QPA_PLATFORM": "xcb",
-        "NVIDIA_DRIVER_CAPABILITIES": "all",
-        "NVIDIA_VISIBLE_DEVICES": "all",
         "LD_LIBRARY_PATH": "/usr/lib/wsl/lib",
-        "MESA_D3D12_DEFAULT_ADAPTER_NAME": "NVIDIA"
+        "LIBGL_ALWAYS_SOFTWARE": "1"
     },
     "runArgs": [
-        "--gpus=all",
         "--privileged",
         "--net=host",
-        "--device=/dev/dxg",
         "-v", "/usr/lib/wsl:/usr/lib/wsl",
         "-v", "/mnt/wslg:/mnt/wslg",
         "-e", "WAYLAND_DISPLAY=$WAYLAND_DISPLAY",
@@ -56,5 +52,6 @@
             "source": "${localWorkspaceFolder}/.vscode",
             "target": "${containerWorkspaceFolder}/.vscode"
         }
-    ]
+    ],
+    "postStartCommand": "sudo chown -R rosusr /home/rosusr/workspace"
 }

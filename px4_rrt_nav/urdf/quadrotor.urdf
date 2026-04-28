@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<robot name="quadrotor">
+
+  <!-- Base Link (Chassis) -->
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="0.20 0.20 0.10"/>
+      </geometry>
+      <material name="dark_grey">
+        <color rgba="0.2 0.2 0.2 1.0"/>
+      </material>
+    </visual>
+  </link>
+
+  <!-- Front Right Rotor (Red to indicate forward direction) -->
+  <link name="rotor_fr">
+    <visual>
+      <geometry>
+        <cylinder radius="0.1" length="0.02"/>
+      </geometry>
+      <material name="red">
+        <color rgba="0.8 0.1 0.1 0.8"/>
+      </material>
+    </visual>
+  </link>
+  <joint name="base_to_rotor_fr" type="fixed">
+    <parent link="base_link"/>
+    <child link="rotor_fr"/>
+    <origin xyz="0.15 -0.15 0.05" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Front Left Rotor (Red) -->
+  <link name="rotor_fl">
+    <visual>
+      <geometry>
+        <cylinder radius="0.1" length="0.02"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+  </link>
+  <joint name="base_to_rotor_fl" type="fixed">
+    <parent link="base_link"/>
+    <child link="rotor_fl"/>
+    <origin xyz="0.15 0.15 0.05" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Back Right Rotor (Black) -->
+  <link name="rotor_br">
+    <visual>
+      <geometry>
+        <cylinder radius="0.1" length="0.02"/>
+      </geometry>
+      <material name="black">
+        <color rgba="0.1 0.1 0.1 0.8"/>
+      </material>
+    </visual>
+  </link>
+  <joint name="base_to_rotor_br" type="fixed">
+    <parent link="base_link"/>
+    <child link="rotor_br"/>
+    <origin xyz="-0.15 -0.15 0.05" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Back Left Rotor (Black) -->
+  <link name="rotor_bl">
+    <visual>
+      <geometry>
+        <cylinder radius="0.1" length="0.02"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+  </link>
+  <joint name="base_to_rotor_bl" type="fixed">
+    <parent link="base_link"/>
+    <child link="rotor_bl"/>
+    <origin xyz="-0.15 0.15 0.05" rpy="0 0 0"/>
+  </joint>
+
+</robot>

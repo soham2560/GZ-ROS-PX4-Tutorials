@@ -4,50 +4,49 @@
         {
             "label": "Session 1: MicroXRCEAgent",
             "type": "shell",
-            "command": "MicroXRCEAgent udp4 -p 8888",
-            "presentation": {
-                "panel": "dedicated",
-                "group": "terminals"
-            }
+            "command": "bash",
+            "args": ["-c", "MicroXRCEAgent udp4 -p 8888"],
+            "presentation": { "panel": "dedicated", "group": "px4_stack" }
         },
         {
             "label": "Session 2: PX4 SITL",
             "type": "shell",
             "command": "bash",
-            "args": ["-c", "cd ~/PX4-Autopilot && make px4_sitl gz_x500"],
-            "presentation": {
-                "panel": "dedicated",
-                "group": "terminals"
-            }
+            "args": ["-c", "echo [WAIT] MicroXRCEAgent on UDP 8888... && until ss -uln | grep 8888; do sleep 1; done && echo [OK] Agent detected. Starting PX4 SITL... && cd ~/PX4-Autopilot && make px4_sitl gz_x500_mono_cam_rrc"],
+            "presentation": { "panel": "dedicated", "group": "px4_stack" }
         },
         {
             "label": "Session 3: QGroundControl",
             "type": "shell",
-            "command": "QGroundControl",
-            "presentation": {
-                "panel": "dedicated",
-                "group": "terminals"
-            }
+            "command": "bash",
+            "args": ["-c", "echo [WAIT] PX4 SITL ROS2 bridge... && source /opt/ros/humble/setup.bash && until ros2 topic list | grep /fmu/out/sensor_combined; do sleep 1; done && echo [OK] PX4 detected. Launching QGroundControl... && QGroundControl"],
+            "presentation": { "panel": "dedicated", "group": "px4_stack" }
         },
         {
             "label": "Session 4: Sensor Combined Listener",
             "type": "shell",
             "command": "bash",
-            "args": ["-c", "cd ~/ws_sensor_combined && source /opt/ros/humble/setup.bash && source install/local_setup.bash && ros2 launch px4_ros_com sensor_combined_listener.launch.py"],
-            "presentation": {
-                "panel": "dedicated",
-                "group": "terminals"
-            }
+            "args": ["-c", "echo [WAIT] sensor_combined topic... && source /opt/ros/humble/setup.bash && until ros2 topic list | grep /fmu/out/sensor_combined; do sleep 1; done && echo [OK] Topic available. Launching listener... && cd ~/ws_sensor_combined && source install/local_setup.bash && ros2 launch px4_ros_com sensor_combined_listener.launch.py"],
+            "presentation": { "panel": "dedicated", "group": "px4_stack" }
         },
         {
-            "label": "Session 5: Offboard Control",
+            "label": "Session 5: RRT Planner & Offboard Control",
             "type": "shell",
             "command": "bash",
-            "args": ["-c", "cd ~/ws_offboard_control/src && cd .. && source /opt/ros/humble/setup.bash && source install/local_setup.bash && python3 ~/workspace/offboard_control.py"],
-            "presentation": {
-                "panel": "dedicated",
-                "group": "terminals"
-            }
+            "args": ["-c", "echo [WAIT] sensor data stream... && source /opt/ros/humble/setup.bash && source ~/ws_sensor_combined/install/local_setup.bash && until ros2 topic echo /fmu/out/sensor_combined --qos-reliability best_effort --qos-durability transient_local --once >/dev/null 2>&1; do echo [WAIT] still no data...; sleep 1; done && echo [OK] Data flowing. Starting RRT + Offboard... && source ~/workspace/install/setup.bash && ros2 launch px4_rrt_nav px4_rrt_launch.py"],
+            "presentation": { "panel": "dedicated", "group": "px4_stack" }
+        },
+        {
+            "label": "Start All: PX4 + RRT Stack",
+            "dependsOn": [
+                "Session 1: MicroXRCEAgent",
+                "Session 2: PX4 SITL",
+                "Session 3: QGroundControl",
+                "Session 4: Sensor Combined Listener",
+                "Session 5: RRT Planner & Offboard Control"
+            ],
+            "dependsOrder": "parallel",
+            "group": { "kind": "build", "isDefault": true }
         }
     ]
 }

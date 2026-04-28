@@ -21,33 +21,38 @@ RUN wget https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -O /usr/
 # Update packages and install required dependencies
 RUN apt-get update && apt-get install -y \
     ros-humble-ros-gzharmonic \
-    python3-colcon-common-extensions && \
+    ros-humble-nav2-map-server \
+    ros-humble-nav2-lifecycle-manager \
+    ros-humble-rviz2 \
+    python3-opencv \
+    python3-colcon-common-extensions \
+    iproute2 && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Create and build the ws_sensor_combined workspace
 RUN mkdir -p /home/rosusr/ws_sensor_combined/src && \
-    cd /home/rosusr/ws_sensor_combined/src && \
-    git clone https://github.com/PX4/px4_msgs.git && \
-    git clone https://github.com/PX4/px4_ros_com.git && \
-    cd .. && \
-    . /opt/ros/humble/setup.bash && \
-    colcon build && \
-    . install/local_setup.bash
-
-# Create and build the ws_offboard_control workspace
-RUN mkdir -p /home/rosusr/ws_offboard_control/src && \
-    cd /home/rosusr/ws_offboard_control/src && \
-    git clone https://github.com/PX4/px4_msgs.git && \
-    git clone https://github.com/PX4/px4_ros_com.git && \
-    cd .. && \
+    cd /home/rosusr/ws_sensor_combined/ && \
     . /opt/ros/humble/setup.bash && \
     colcon build && \
     . install/local_setup.bash
 
 RUN pip install git+https://github.com/fishros/ros2bag_convert.git
 
+RUN rm -rf /home/rosusr/PX4-Autopilot && \
+    git clone https://github.com/pyromania99/PX4-Autopilot.git /home/rosusr/PX4-Autopilot && \
+    cd /home/rosusr/PX4-Autopilot && \
+    git submodule update --init --recursive
+RUN chown -R rosusr:rosusr /home/rosusr/PX4-Autopilot
+
 # Switch back to the non-root user 
 USER rosusr
+
+RUN cd /home/rosusr/PX4-Autopilot && make px4_sitl
+
+RUN pip install "numpy<2" 
+
+RUN echo "source /opt/ros/humble/setup.bash" >> /home/rosusr/.bashrc && \
+    echo "source /home/rosusr/ws_sensor_combined/install/local_setup.bash" >> /home/rosusr/.bashrc
 
 # Set the default command to open a bash shell
 CMD ["bash"]
