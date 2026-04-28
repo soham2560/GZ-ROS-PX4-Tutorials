@@ -7,6 +7,11 @@ def generate_launch_description():
     pkg_dir = get_package_share_directory('px4_rrt_nav')
     map_yaml_file = os.path.join(pkg_dir, 'maps', 'map.yaml')
     rviz_config_file = os.path.join(pkg_dir, 'rviz', 'px4_rrt.rviz')
+    urdf_file = os.path.join(pkg_dir, 'urdf', 'quadrotor.urdf')
+
+    # Read the URDF file to pass it as a string to the publisher
+    with open(urdf_file, 'r') as infp:
+        robot_desc = infp.read()
 
     return LaunchDescription([
         # 1. Start Map Server
@@ -40,7 +45,7 @@ def generate_launch_description():
             parameters=[{'inflation_radius': 0.40}, {'step_size': 0.02}]
         ),
 
-        # 4. Offboard Control Node
+        # 4. Offboard Control Node (Publishes dynamic map -> base_link TF)
         Node(
             package='px4_rrt_nav',
             executable='offboard_control',
@@ -48,7 +53,16 @@ def generate_launch_description():
             output='screen'
         ),
 
-        # 5. Open RViz
+        # 5. Robot State Publisher (Publishes static base_link -> rotor TFs & /robot_description)
+        Node(
+            package='robot_state_publisher',
+            executable='robot_state_publisher',
+            name='robot_state_publisher',
+            output='screen',
+            parameters=[{'robot_description': robot_desc}]
+        ),
+
+        # 6. Open RViz
         Node(
             package='rviz2',
             executable='rviz2',

@@ -57,9 +57,6 @@ class OffboardControl(Node):
     def path_callback(self, msg: Path):
         self.get_logger().info("New Global Path Received! Executing smooth trajectory.")
         
-        # --- FIXED: CONVERT INCOMING ENU PATH TO INTERNAL NED PATH ---
-        # RViz Path (ENU): p.pose.position.x is East, p.pose.position.y is North
-        # PX4 Flight (NED): position[0] is North, position[1] is East
         self.current_path = [[p.pose.position.y, p.pose.position.x, self.altitude] for p in msg.poses]
         
         self.path_active = True
